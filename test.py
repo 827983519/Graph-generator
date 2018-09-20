@@ -1,6 +1,6 @@
 import re
 import sys
-sys.path.append("/home/wade/Downloads/ECE 650 - Fall 2018 - 9142018 - 1011 AM")
+#sys.path.append("/home/wade/Downloads/ECE 650 - Fall 2018 - 9142018 - 1011 AM")
 from ag_intersect import *
 
 command = ''
@@ -72,6 +72,11 @@ def check_command_format(input,line):
             pa1 = re.compile(r'\(-?\d+,-?\d+\)')
             check_reap =  pa1.findall(line)
 
+            for i in str_name:
+                if i.isalpha() == False and i != ' ':
+                    print "Error:the name of street should consist of alphabetical and space characters "
+                    return -1
+
             for i in str_num:
                 if i == '.':
                     print "Error:the coordinate should be integer.\n"
@@ -83,7 +88,7 @@ def check_command_format(input,line):
                     return -1
             
             
-            if my_dict.has_key(str_name):
+            if my_dict.has_key(str_name.lower()):
                 print "Error:street already exists.\n"
 
             if num_patt.findall(str_num) !=  num_patt.findall(sp[2]):
@@ -91,7 +96,7 @@ def check_command_format(input,line):
                 return -1
             
             else:
-                my_dict[str_name] = str_num
+                my_dict[str_name.lower()] = str_num
                 return 1
     
     if input == "c" :
@@ -104,8 +109,7 @@ def check_command_format(input,line):
             sp = re.split(r'\s"|"\s',line)
             str_name = pa.search(line).group(1)
             str_num = pa.search(line).group(2)
-            print str_name
-            print str_num
+
             num_patt = re.compile(r'\d')
 
             for i in str_num:
@@ -117,11 +121,11 @@ def check_command_format(input,line):
                 print "Error:wrong command format.\n"
                 return -1
             
-            elif my_dict.has_key(str_name) == False:
+            elif my_dict.has_key(str_name.lower()) == False:
                 print "Error:\'c\' or \'r\' specified for a street that does not exist.\n"
                 return -1 
             else:
-                my_dict[str_name] = str_num
+                my_dict[str_name.lower()] = str_num
                 return 1
                 print my_dict
             
@@ -132,11 +136,11 @@ def check_command_format(input,line):
             print "Error:wrong command format.\n"
             return -1
         str_name = pa.search(line).group(1)
-        if  my_dict.has_key(str_name) == False:
+        if  my_dict.has_key(str_name.lower()) == False:
             print "Error:\'c\' or \'r\' specified for a street that does not exist.\n"
             return -1
         else:
-            del my_dict[str_name]
+            del my_dict[str_name.lower()]
             return 1
             print my_dict
 
@@ -149,19 +153,24 @@ def check_command_format(input,line):
 
 
 
-
-
-
-
-def draw_graph():
+def get_line_segment():
     street_line = []
     pattern = re.compile(r'-?\d+')
+
     for i in range(len(my_dict)): 
         temp = []
         num_list = pattern.findall(my_dict.values()[i])
         for j in range(0,len(num_list) - 2 ,2):        
             temp.append(line(point(int(num_list[j]),int(num_list[j + 1])), point(int(num_list[j + 2]), int(num_list[j + 3]))))
+
         street_line.append(temp)
+    return street_line
+
+
+
+def draw_graph():
+    street_line = []
+    street_line = get_line_segment()
     print street_line
 
     intersect_point = get_intersect(street_line)
@@ -191,6 +200,7 @@ def main():
     print 'Finished reading input.\n'
  
     sys.exit(0)
+
 
 if __name__ == '__main__':
     main()

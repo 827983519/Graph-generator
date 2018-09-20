@@ -119,8 +119,7 @@ def check_command_format(input,line):
             
             elif my_dict.has_key(str_name) == False:
                 print "Error:\'c\' or \'r\' specified for a street that does not exist.\n"
-                return -1
-            
+                return -1 
             else:
                 my_dict[str_name] = str_num
                 return 1

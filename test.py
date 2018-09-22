@@ -1,7 +1,6 @@
 import re
 import sys
-#sys.path.append("/home/wade/Downloads/ECE 650 - Fall 2018 - 9142018 - 1011 AM")
-from ag_intersect import *
+from ag_intersection import *
 
 command = ''
 str_name = ''
@@ -173,8 +172,8 @@ def draw_graph():
     street_line = get_line_segment()
     print street_line
 
-    intersect_point = get_intersect(street_line)
-    print  intersect_point
+    get_graph(street_line)
+    #print  intersect_point
 
 
 

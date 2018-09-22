@@ -68,6 +68,34 @@ def intersect (l1, l2):
     return point(xcoor, ycoor)
 
 
+index = {}
+id = 1
+
+def get_index(vertics):
+    global index,id
+    if len(index) == 0:
+        for i in vertics[0]:
+            index[id] = i
+            id = id + 1
+    else:
+        for i in index.keys():
+            for j in vertics[0]:
+                if index[i].x == j.x and index[i].y == j.y:
+                    break
+                elif [j] == vertics[0][-1:]:
+                    del index[i]
+        
+        for i in vertics[0]:
+            for j in index.values():
+                if i.x == j.x and i.y == j.y:
+                    break
+                elif [j] == index.values()[-1:]:
+                    index[id] = i
+                    id = id + 1
+    print index
+
+
+
 def check_repeat(a,intersection):
     
     if len(intersection) == 0:
@@ -77,7 +105,7 @@ def check_repeat(a,intersection):
         for j in a:
             for i in range(len(intersection)):
                 if j.x == intersection[i].x and j.y == intersection[i].y:
-                    break
+                    break    
                 elif i == len(intersection) - 1:
                     intersection.append(j)
     return intersection
@@ -85,6 +113,7 @@ def check_repeat(a,intersection):
 
 
 def get_intersect(street_line):
+    global index,id
     vertics = []
     intersection = []
     for i in range(0,len(street_line) - 1):
@@ -93,13 +122,48 @@ def get_intersect(street_line):
                 for h in street_line[k]:
                     if intersect(j,h) != -1:
                         vertics = check_repeat([intersect(j,h),h.dst,j.dst,h.src,j.src],vertics) 
-                        intersection = check_repeat([intersect(j,h)],intersection) 
-                                                            
+                        intersection = check_repeat([intersect(j,h)],intersection)                                                             
    
-    print intersection
+    vertics = [vertics,intersection]
+
     print vertics
     return vertics
 
+
+def on_sameLine(a,b,c):
+    if a.x == b.x:
+        if c.x == a.x:
+            if abs(a.x - c.x) > abs(a.x - b.x):
+                return b
+
+            else:
+                return c
+        else:
+            return b
+        
+    else:
+        k = (a.y - b.y)/(a.x - b.x)
+        b = a.y - (a.y - b.y)/(a.x - b.x)
+        if k * c.x + b == c.y:
+        
+        
+
+def get_edge(vertics):
+    for i in vertics[1]:
+        other_vertics = vertics[0][:]
+        other_vertics.remove(i)
+        for j in other_vertics:
+            for k in other_vertics:
+                if
+
+
+
+def get_graph(street_line):
+    vertics = get_intersect(street_line)
+    get_index(vertics)
+    edge = get_dege(vertics)
+
+    
 
 
 

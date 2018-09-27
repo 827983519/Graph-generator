@@ -30,12 +30,9 @@ def get_command():
         return line
 
 def check_command(line): 
-    
-    
     sp = re.split(r'\s',line)   
     command1 = sp[0].strip()
     
-
     if command1 != 'a' and command1 != 'c' and command1 != 'r' and command1 != 'g':
         print ("Error: unknown command \"%s\".\n"%(command1))
         return -1
@@ -51,13 +48,10 @@ def check_command(line):
 
     elif command1 == 'g':
         return check_command_format("g",line)   
-
-    
-
     
 def check_command_format(input,line):
     if input == "a" :
-        pa = re.compile(r'a +"(.*)" +((\(-?\d+.?-?\d*,-?\d+.?-?\d*\) *)+)')  
+        pa = re.compile(r'a +"(.+)" +((\( *-?\d+.?-?\d* *, *-?\d+.?-?\d* *\) *)+)')  
         if pa.search(line) == None:
             print "Error:wrong command format.\n"
             return -1
@@ -99,7 +93,7 @@ def check_command_format(input,line):
                 return 1
     
     if input == "c" :
-        pa = re.compile(r'c +"(.*)" +((\(-?\d+.?-?\d*,-?\d+.?-?\d*\) *)+)')
+        pa = re.compile(r'c +"(.+)" +((\( *-?\d+.?-?\d* *, *-?\d+.?-?\d* *\) *)+)')
         if pa.search(line) == None:
             print "Error:wrong command format.\n"
             return -1
@@ -128,7 +122,6 @@ def check_command_format(input,line):
                 return 1
                 print my_dict
             
-    
     if input == "r" :
         pa = re.compile(r'r +"(.*)" *')
         if pa.search(line) == None:
@@ -151,9 +144,8 @@ def check_command_format(input,line):
             return "g"
 
 
-
-def get_line_segment():
-    street_line = []
+def get_line_segment(street_line):
+    
     pattern = re.compile(r'-?\d+')
 
     for i in range(len(my_dict)): 
@@ -163,24 +155,15 @@ def get_line_segment():
             temp.append(line(point(int(num_list[j]),int(num_list[j + 1])), point(int(num_list[j + 2]), int(num_list[j + 3]))))
 
         street_line.append(temp)
-    return street_line
-
 
 
 def draw_graph():
+    message = []
     street_line = []
-    street_line = get_line_segment()
-    print street_line
+    get_line_segment(street_line)
 
-    get_graph(street_line)
-    #print  intersect_point
-
-
-
-
-
-
-
+    message = get_graph(street_line)
+    draw(message)
         
 def main():
     instruction()
@@ -194,10 +177,7 @@ def main():
         if  ret == 'g':
             draw_graph()
     
-    
-
     print 'Finished reading input.\n'
- 
     sys.exit(0)
 
 

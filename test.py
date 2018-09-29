@@ -2,22 +2,11 @@ import re
 import sys
 from ag_intersection import *
 
-command = ''
-str_name = ''
-num = []
-street_name = []
-street_coor = []
 my_dict = {}
-
 
 def instruction():
     print "\nPlease enter commnd:\n"
     print "a--add a street, \nc--change a street, \nr--remove a street, \ng--generate a graph\n"
-
-def Error_message():
-    print "\nError:\n"
-    print "\nFor example: a \"Weber Street\" (2,-1) (2,2)"
-    print "Please enter again:\n"
 
 
 def get_command():
@@ -26,8 +15,8 @@ def get_command():
         return 0
     else:    
         line.strip()
-        line = line[:-1]
-        return line
+        a = line[:-1]
+        return a
 
 def check_command(line): 
     sp = re.split(r'\s',line)   
@@ -35,8 +24,7 @@ def check_command(line):
     
     if command1 != 'a' and command1 != 'c' and command1 != 'r' and command1 != 'g':
         print ("Error: unknown command \"%s\".\n"%(command1))
-        return -1
-    
+        return -1    
     elif command1 == 'a':
         check_command_format("a",line)
     
@@ -62,7 +50,7 @@ def check_command_format(input,line):
     
             num_patt = re.compile(r'\d+')
 
-            pa1 = re.compile(r'\(-?\d+,-?\d+\)')
+            pa1 = re.compile(r'\(-?\d+,-?\d+\) *')
             check_reap =  pa1.findall(line)
 
             for i in str_name:
@@ -80,10 +68,13 @@ def check_command_format(input,line):
                     print "Error:Coordinate points are repeated.\n"
                     return -1
             
-            
             if my_dict.has_key(str_name.lower()):
                 print "Error:street already exists.\n"
 
+            if len(re.split(r'\s',sp[2])) != len(pa1.findall(str_num)):
+                print "Error:wrong command format\n"
+                return -1
+           
             if num_patt.findall(str_num) !=  num_patt.findall(sp[2]):
                 print "Error:wrong command format.\n"
                 return -1
@@ -105,6 +96,13 @@ def check_command_format(input,line):
 
             num_patt = re.compile(r'\d')
 
+            pa1 = re.compile(r'\(-?\d+,-?\d+\) *')
+            check_reap =  pa1.findall(line)
+
+            if len(re.split(r'\s',sp[2])) != len(pa1.findall(str_num)):
+                print "Error:wrong command format\n"
+                return -1
+
             for i in str_num:
                 if i == '.':
                     print "Error:the coordinate should be integer.\n"
@@ -120,8 +118,7 @@ def check_command_format(input,line):
             else:
                 my_dict[str_name.lower()] = str_num
                 return 1
-                print my_dict
-            
+
     if input == "r" :
         pa = re.compile(r'r +"(.*)" *')
         if pa.search(line) == None:
@@ -134,7 +131,6 @@ def check_command_format(input,line):
         else:
             del my_dict[str_name.lower()]
             return 1
-            print my_dict
 
     if input == "g" :
         if len(line) != 1 and line != "g":

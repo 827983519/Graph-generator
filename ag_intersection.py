@@ -43,18 +43,17 @@ def intersect (l1, l2):
     
     leng_l1 = (y1 - y2)*(y1 - y2) + (x1 - x2)*(x1 - x2) 
     leng_l2 = (y3 - y4)*(y3 - y4) + (x3 - x4)*(x3 - x4) 
-
+ 
     if (x1 == x3 and y1 == y3 and x2 == x4 and y2 == y4) or (x1 == x4 and y1 == y4 and x2 == x3 and y2 == y3):
         return 7
-
     if xden == 0:
         if x1 == x2:
             if x3 == x4 == x1:   #on the same line
                 if leng_l1 > leng_l2:
-                    if max(y1,y2) > y3 > min(y1,y2) and max(y1,y2) > y4 > min(y1,y2):
+                    if max(y1,y2) >= y3 >= min(y1,y2) and max(y1,y2) >= y4 >= min(y1,y2):
                         return 1
                 else:
-                    if max(y3,y4) > y1 > min(y3,y4) and max(y3,y4) > y2 > min(y3,y4):
+                    if max(y3,y4) >= y1 >= min(y3,y4) and max(y3,y4) >= y2 >= min(y3,y4):
                         return 2
 
                 if max(y1,y2) >= y3 >= min(y1,y2) and not(max(y1,y2) >= y4 >= min(y1,y2)):
@@ -78,19 +77,19 @@ def intersect (l1, l2):
             b = y1 - x1 * ((y1 - y2)/(x1 - x2))
             if k* x3 + b == y3:  #on the same line
                 if leng_l1 > leng_l2:
-                    if max(y1,y2) >= y3 >= min(y1,y2) and max(y1,y2) >= y4 >= min(y1,y2):
+                    if max(x1,x2) >= x3 >= min(x1,x2) and max(x1,x2) >= x4 >= min(x1,x2):
                         return 1
                 else:
-                    if max(y3,y4) >= y1 >= min(y3,y4) and max(y3,y4) >= y2 >= min(y3,y4):
+                    if max(x3,x4) >= x1 >= min(x3,x4) and max(x3,x4) >= x2 >= min(x3,x4):
                         return 2
 
-                if max(y1,y2) >= y3 >= min(y1,y2) and not(max(y1,y2) >= y4 >= min(y1,y2)):
-                    if y3 > y4:
+                if max(x1,x2) >= x3 >= min(x1,x2) and not(max(x1,x2) >= x4 >= min(x1,x2)):
+                    if x3 > x4:
                         return 3
                     else:
                         return 4
-                elif max(y1,y2) >= y4 >= min(y1,y2) and not(max(y1,y2) >= y3 >= min(y1,y2)):
-                    if y3 > y4:
+                elif max(x1,x2) >= x4 >= min(x1,x2) and not(max(x1,x2) >= x3 >= min(x1,x2)):
+                    if x3 > x4:
                         return 5
                     else:
                         return 6
@@ -98,12 +97,13 @@ def intersect (l1, l2):
                     return -1 
             else:
                 return -1
-                
+  
     xcoor =  xnum / xden
     ynum = (x1*y2 - y1*x2)*(y3-y4) - (y1-y2)*(x3*y4-y3*x4)
     yden = (x1-x2)*(y3-y4) - (y1-y2)*(x3-x4)
     ycoor = ynum / yden    
-    if xcoor < min(x1,x2) or xcoor > max(x1,x2) or xcoor < min(x3,x4) or xcoor > max (x3,x4):
+    if xcoor < min(x1,x2) or xcoor > max(x1,x2) or xcoor < min(x3,x4) or xcoor > max (x3,x4) or\
+    ycoor < min(y1,y2) or ycoor > max(y1,y2) or ycoor < min(y3,y4) or ycoor > max (y3,y4):
         return -1
     
     return point(xcoor, ycoor)
@@ -136,7 +136,15 @@ def get_index(vertics):
 #check if a already in intersection
 def check_repeat(a,intersection):
     if len(intersection) == 0:
-        intersection.extend(a)
+        intersection.append(a[0])
+        for i in a:
+            for j in intersection:
+                if i.x == j.x and i.y == j.y:
+                    break
+                elif [j] == intersection[-1:]:
+                    intersection.append(i)
+      
+
     else:
         for j in a:
             for i in range(len(intersection)):
@@ -144,7 +152,8 @@ def check_repeat(a,intersection):
                     break       
                 elif i == len(intersection) - 1:
                     intersection.append(j)
-    
+
+
 #check if a already in its intersection list
 def get_IAndE(a,my_intersect):
     if len(my_intersect) == 0:
@@ -172,24 +181,44 @@ def get_intersect(street_line,my_intersect,vertics):
             for k in range(i+1,len(street_line)):
                 for h in street_line[k]:
                     ret = intersect(j,h)
-                    j_l = j.dst if j.dst.y < j.src.y else j.src
-                    j_h = j.src if j.src.y > j.dst.y else j.dst
+                    print j,h
+                    print ret
+                    
+                    if j.dst.y != j.src.y:
+                        j_l = j.dst if j.dst.y < j.src.y else j.src
+                        j_h = j.src if j.src.y > j.dst.y else j.dst
+                    else:
+                        j_l = j.dst if j.dst.x < j.src.x else j.src
+                        j_h = j.src if j.src.x > j.dst.x else j.dst
 
                     if ret == 1:
-                        Exter_l = j.dst if j.dst.y < j.src.y else j.src
-                        Exter_h = j.src if j.src.y > j.dst.y else j.dst
-                        Inter_l = h.dst if h.dst.y < h.src.y else h.src
-                        Inter_h = h.src if h.src.y > h.dst.y else h.dst
+                        if j.dst.y != j.src.y:
+                            Exter_l = j.dst if j.dst.y < j.src.y else j.src
+                            Exter_h = j.src if j.src.y > j.dst.y else j.dst
+                            Inter_l = h.dst if h.dst.y < h.src.y else h.src
+                            Inter_h = h.src if h.src.y > h.dst.y else h.dst
+                        else:
+                            Exter_l = j.dst if j.dst.x < j.src.x else j.src
+                            Exter_h = j.src if j.src.x > j.dst.x else j.dst
+                            Inter_l = h.dst if h.dst.x < h.src.x else h.src
+                            Inter_h = h.src if h.src.x > h.dst.x else h.dst
                                                
                         check_repeat([h.dst,j.dst,h.src,j.src],vertics)
                         get_IAndE([Inter_l,Inter_h,Exter_l],my_intersect)
                         get_IAndE([Inter_h,Inter_l,Exter_h],my_intersect)
 
                     elif ret == 2:
-                        Exter_l = h.dst if h.dst.y < h.src.y else h.src
-                        Exter_h = h.src if h.src.y > h.dst.y else h.dst
-                        Inter_l = j.dst if j.dst.y < j.src.y else j.src
-                        Inter_h = j.src if j.src.y > j.dst.y else j.dst
+                        if j.dst.y != j.src.y: 
+                            Exter_l = h.dst if h.dst.y < h.src.y else h.src
+                            Exter_h = h.src if h.src.y > h.dst.y else h.dst
+                            Inter_l = j.dst if j.dst.y < j.src.y else j.src
+                            Inter_h = j.src if j.src.y > j.dst.y else j.dst
+                        else:
+                            Exter_l = h.dst if h.dst.x < h.src.x else h.src
+                            Exter_h = h.src if h.src.x > h.dst.x else h.dst
+                            Inter_l = j.dst if j.dst.x < j.src.x else j.src
+                            Inter_h = j.src if j.src.x > j.dst.x else j.dst
+
                         check_repeat([h.dst,j.dst,h.src,j.src],vertics)
                         get_IAndE([Inter_l,Inter_h,Exter_l],my_intersect)
                         get_IAndE([Inter_h,Inter_l,Exter_h],my_intersect)
@@ -219,12 +248,10 @@ def get_intersect(street_line,my_intersect,vertics):
                         get_IAndE([h.dst,h.src],my_intersect)
 
                     elif ret != -1:
-                        a =[ret,h.dst,j.dst,h.src,j.src]
-                        for i in a[1:]:
-                            if i.x == a[0].x and i.y == a[0].y:
-                                a.remove(i)
+                        a =[ret,h.dst,j.dst,h.src,j.src]  
                         check_repeat(a,vertics)
                         get_IAndE(a,my_intersect)
+                    print my_intersect
 
     if(len(vertics)) == 0:
         return -1                                           
@@ -254,9 +281,12 @@ def get_edge(my_intersect,edge,edge_index):
             ret = [j]
             for k in range(len(my_intersect)):
                 on_sameLine(i[0],j,my_intersect[k][0],edge,my_intersect[-1:][0][0],ret)
-            edge.extend([[i[0],ret[0]]])  
+            if i[0].x != ret[0].x or i[0].y != ret[0].y:
+                edge.extend([[i[0],ret[0]]])  
+
     my_edge = []
     my_edge.extend([edge[0]])
+    
 
 #remove repeated edge
     for i in edge[1:]:

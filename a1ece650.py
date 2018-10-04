@@ -11,7 +11,7 @@ def instruction():
 
 def get_command():
     line = sys.stdin.readline()
-    if line == "\n":
+    if line == "":
         return 0
     else:    
         line.strip()

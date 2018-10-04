@@ -181,9 +181,7 @@ def get_intersect(street_line,my_intersect,vertics):
             for k in range(i+1,len(street_line)):
                 for h in street_line[k]:
                     ret = intersect(j,h)
-                    print j,h
-                    print ret
-                    
+
                     if j.dst.y != j.src.y:
                         j_l = j.dst if j.dst.y < j.src.y else j.src
                         j_h = j.src if j.src.y > j.dst.y else j.dst
@@ -251,7 +249,7 @@ def get_intersect(street_line,my_intersect,vertics):
                         a =[ret,h.dst,j.dst,h.src,j.src]  
                         check_repeat(a,vertics)
                         get_IAndE(a,my_intersect)
-                    print my_intersect
+              
 
     if(len(vertics)) == 0:
         return -1                                           

@@ -108,7 +108,6 @@ def intersect (l1, l2):
     
     return point(xcoor, ycoor)
 
-
 index = {}
 id = 1
 def get_index(vertics):
@@ -142,8 +141,7 @@ def check_repeat(a,intersection):
                 if i.x == j.x and i.y == j.y:
                     break
                 elif [j] == intersection[-1:]:
-                    intersection.append(i)
-      
+                    intersection.append(i)     
 
     else:
         for j in a:
@@ -249,10 +247,10 @@ def get_intersect(street_line,my_intersect,vertics):
                         a =[ret,h.dst,j.dst,h.src,j.src]  
                         check_repeat(a,vertics)
                         get_IAndE(a,my_intersect)
-              
 
     if(len(vertics)) == 0:
         return -1                                           
+
 
 def on_sameLine(a,b,c,edge,last_inter,ret):
     if a.x == b.x:
@@ -284,7 +282,6 @@ def get_edge(my_intersect,edge,edge_index):
 
     my_edge = []
     my_edge.extend([edge[0]])
-    
 
 #remove repeated edge
     for i in edge[1:]:

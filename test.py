@@ -1,12 +1,18 @@
-from ag_intersection.py import *
+from ag_intersection import *
+from a1ece650 import *
 import sys
 import unittest
 
 class MyTest(unittest.TestCase):
 
-    def test_upper(self):
-        """Test the upper() function of class string"""
-        self.assertEqual('foo'.upper(), 'FOO')
+    def test_check_input(self):
+        """Test the check_command function"""
+        self.assertEqual(check_command("a \"weber\" 1,2,3,4,5,6"), -1)
+        self.assertEqual(check_command("a \"weber\" (1,2 (3,4) (5,6)"), -1)
+        self.assertEqual(check_command("a \"weber\" (1,2)(3,4) (5,6)"), -1)
+        self.assertEqual(check_command("a\"weber\" (1,2) (3,4) (5,6)"), -1)
+        self.assertEqual(check_command("a \"weber\"(1,2) (3,4) (5,6)"), -1)
+
 
     def test_isupper(self):
         """Test isupper() function of class string"""
@@ -15,9 +21,7 @@ class MyTest(unittest.TestCase):
         self.assertFalse('foo'.isupper())
         self.assertFalse('Foo'.isupper())
 
-    def test_failing(self):
-        """A test that fails"""
-        self.assertEqual(True, False)
 
 if __name__ == '__main__':
+
     unittest.main()

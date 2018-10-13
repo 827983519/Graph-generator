@@ -17,7 +17,8 @@ class point(object):
         self.y = float(y)
 
     def __repr__(self):
-        return '(' + pp(self.x) + ', ' + pp(self.y) + ')'
+        #return '(' + pp(self.x) + ', ' + pp(self.y) + ')'
+        return '(' + "{0:.2f}".format(self.x) + ',' + "{0:.2f}".format(self.y) + ')'
 
 
 class line(object):
@@ -249,7 +250,7 @@ def get_intersect(street_line,my_intersect,vertics):
                         get_IAndE(a,my_intersect)
 
     if(len(vertics)) == 0:
-        return -1                                           
+        return -1                                         
 
 
 def on_sameLine(a,b,c,edge,last_inter,ret):
@@ -262,11 +263,13 @@ def on_sameLine(a,b,c,edge,last_inter,ret):
     else:
         k = (a.y - b.y)/(a.x - b.x)
         p = a.y - a.x*(a.y - b.y)/(a.x - b.x)
-        if c.x * k + p == c.y:
+    
+        if c.x * k + p - c.y < 0.00001:
             if (a.x - c.x) * (a.x - c.x) + (a.y - c.y) *(a.y - c.y) < (a.x - b.x) * (a.x - b.x) + (a.y - b.y) *(a.y - b.y) and\
             ((c.x > a.x and b.x > a.x) or (c.x < a.x and b.x < a.x)):
                 if (a.x - c.x) * (a.x - c.x) + (a.y - c.y) *(a.y - c.y) < (a.x - ret[0].x) * (a.x - ret[0].x) + (a.y - ret[0].y) *(a.y - ret[0].y):
                     ret[0] = c
+    
             
 
 def get_edge(my_intersect,edge,edge_index):
@@ -279,9 +282,9 @@ def get_edge(my_intersect,edge,edge_index):
                 on_sameLine(i[0],j,my_intersect[k][0],edge,my_intersect[-1:][0][0],ret)
             if i[0].x != ret[0].x or i[0].y != ret[0].y:
                 edge.extend([[i[0],ret[0]]])  
-
     my_edge = []
     my_edge.extend([edge[0]])
+    
 
 #remove repeated edge
     for i in edge[1:]:
@@ -292,7 +295,6 @@ def get_edge(my_intersect,edge,edge_index):
             elif [j] == my_edge[-1:]: 
                 my_edge.append(i)
                 break
-
  #get index of edge
     for i in my_edge:
         for j in index:
@@ -333,7 +335,7 @@ def draw(message):
 
         print "E = {"
         for i in message[1]:
-            print "  <", i[0],",",i[1],">",
+            print "<",i[0],",",i[1],">",
             if [i] != message[1][-1:]:
                 print ","
         print "\n}\n"

@@ -71,10 +71,6 @@ def check_command_format(input,line):
             if my_dict.has_key(str_name.lower()):
                 print "Error:street already exists.\n"
 
-            if len(re.split(r'\s+',sp[2].strip())) != len(pa1.findall(str_num)):
-                print "Error:wrong command format\n"
-                return -1
-           
             if num_patt.findall(str_num) !=  num_patt.findall(sp[2]):
                 print "Error:wrong command format\n"
                 return -1
@@ -99,31 +95,32 @@ def check_command_format(input,line):
             pa1 = re.compile(r'\(-?\d+,-?\d+\) *')
             check_reap =  pa1.findall(line)
 
-            if len(re.split(r'\s',sp[2])) != len(pa1.findall(str_num)):
-                print "Error:wrong command format\n"
-                return -1
-
             for i in str_num:
                 if i == '.':
                     print "Error:the coordinate should be integer\n"
                     return -1
+            if my_dict.has_key(str_name.lower()) == False:
+                print "Error:\'c\' or \'r\' specified for a street that does not exist\n"
+                return -1
 
             if num_patt.findall(str_num) !=  num_patt.findall(sp[2]):
                 print "Error:wrong command format\n"
                 return -1
             
-            elif my_dict.has_key(str_name.lower()) == False:
-                print "Error:\'c\' or \'r\' specified for a street that does not exist\n"
-                return -1 
             else:
                 my_dict[str_name.lower()] = str_num
                 return 1
 
     if input == "r" :
+        sp = re.split(r'\s"|"\s',line)
+        if len(sp) != 2:
+            print "Error:wrong command format\n"
+            return -1 
         pa = re.compile(r'r +"(.*)" *')
         if pa.search(line) == None:
             print "Error:wrong command format\n"
             return -1
+        #pa1 = re.c
         str_name = pa.search(line).group(1)
         if  my_dict.has_key(str_name.lower()) == False:
             print "Error:\'c\' or \'r\' specified for a street that does not exist\n"

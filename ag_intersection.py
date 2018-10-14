@@ -269,7 +269,6 @@ def on_sameLine(a,b,c,edge,last_inter,ret):
             ((c.x > a.x and b.x > a.x) or (c.x < a.x and b.x < a.x)):
                 if (a.x - c.x) * (a.x - c.x) + (a.y - c.y) *(a.y - c.y) < (a.x - ret[0].x) * (a.x - ret[0].x) + (a.y - ret[0].y) *(a.y - ret[0].y):
                     ret[0] = c
-    
             
 
 def get_edge(my_intersect,edge,edge_index):

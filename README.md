@@ -1,4 +1,4 @@
-First file
+#### The code can detect the whether street information input by user is correct and compute the Edge and Vertices.
 
-sdas
-Can judge whether the input command is correct and split the command into address coornidate using the regular expression
+
+#### Basically, it reads street information and output undirected graph.
